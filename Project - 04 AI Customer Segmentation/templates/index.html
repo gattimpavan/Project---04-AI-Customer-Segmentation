@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify AI Customer Segmentation & Intelligence Cockpit</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+        <div class="brand-section">
+            <div class="spotify-logo-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.48.66.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            </div>
+            <div class="brand-title">
+                <h1>PROJECT - 04: AI CUSTOMER SEGMENTATION <span class="badge-pill">Autonomous Intelligence</span></h1>
+                <p>Spotify Behavioral Customer Intelligence & LLM Differentiated Marketing Strategy System</p>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <a href="/api/download-report" class="btn-primary" id="btnDownloadReport">
+                <span>📑</span> Download Executive PDF Report
+            </a>
+            <a href="/api/export-csv" class="btn-secondary" id="btnExportCsv">
+                <span>📥</span> Export Telemetry CSV
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="dashboard-container">
+        <!-- Problem Statement Banner -->
+        <section class="problem-banner">
+            <div class="problem-icon">💡</div>
+            <div class="problem-text">
+                <h4>Spotify Executive Problem Statement</h4>
+                <p>
+                    "Spotify company treats its customers using broad demographic segments, resulting in inefficient campaigns.
+                    Develop an LLM-powered customer intelligence system that discovers meaningful behavioral segments from transaction
+                    and interaction data and recommends differentiated marketing strategies."
+                </p>
+            </div>
+        </section>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="tab-overview">
+                <span class="tab-icon">📊</span> Executive Cockpit & KPIs
+            </button>
+            <button class="tab-btn" data-tab="tab-latent-space">
+                <span class="tab-icon">🌌</span> Latent Space Explorer (2D PCA)
+            </button>
+            <button class="tab-btn" data-tab="tab-radar-profile">
+                <span class="tab-icon">🎯</span> Segment Radar & Deep Profile
+            </button>
+            <button class="tab-btn" data-tab="tab-llm-studio">
+                <span class="tab-icon">🧠</span> LLM Persona & Strategy Studio
+            </button>
+            <button class="tab-btn" data-tab="tab-user-lookup">
+                <span class="tab-icon">🔍</span> Customer Telemetry Lookup
+            </button>
+            <button class="tab-btn" data-tab="tab-simulator">
+                <span class="tab-icon">📈</span> Campaign Simulator & ROI Lift
+            </button>
+            <button class="tab-btn" data-tab="tab-documentation">
+                <span class="tab-icon">📑</span> PDF Report & Methodology
+            </button>
+        </nav>
+
+        <!-- TAB 1: EXECUTIVE COCKPIT & KPIS -->
+        <section id="tab-overview" class="tab-content active">
+            <!-- KPI Summary Cards -->
+            <div class="grid-kpi">
+                <div class="kpi-card">
+                    <div class="kpi-title">Streaming Telemetry Base</div>
+                    <div class="kpi-value">20,000</div>
+                    <div class="kpi-subtitle">Active Spotify user profiles ingested</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Discovered Behavioral Clusters</div>
+                    <div class="kpi-value">6</div>
+                    <div class="kpi-subtitle">K-Means++ & GMM converged archetypes</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Cluster Separation Index</div>
+                    <div class="kpi-value">{{ summary.silhouette_score }}</div>
+                    <div class="kpi-subtitle">Silhouette Score (Davies-Bouldin: {{ summary.davies_bouldin }})</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Average Customer LTV</div>
+                    <div class="kpi-value">${{ summary.avg_ltv }}</div>
+                    <div class="kpi-subtitle">Cumulative realized subscriber value</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Marketing Conversion Lift</div>
+                    <div class="kpi-value kpi-lift-positive">+314%</div>
+                    <div class="kpi-subtitle">Behavioral vs. Demographic Targeting</div>
+                </div>
+            </div>
+
+            <!-- Two-Column Visual Grid -->
+            <div class="grid-2col">
+                <!-- Cluster Share Doughnut Chart -->
+                <div class="card-panel">
+                    <div class="card-header">
+                        <div>
+                            <h3>🎧 Discovered Behavioral Segments Share</h3>
+                            <p>Proportion of Spotify user base partitioned by authentic listening patterns</p>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="clusterShareChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Demographic Inefficiency Bar Chart -->
+                <div class="card-panel">
+                    <div class="card-header">
+                        <div>
+                            <h3>⚠️ The Demographic Trap (Variance Flaw)</h3>
+                            <p>High intra-group variance in legacy demographic brackets vs tight AI clusters</p>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="demoInefficiencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discovered Clusters Executive Summary Table -->
+            <div class="card-panel">
+                <div class="card-header">
+                    <div>
+                        <h3>📋 Discovered Behavioral Archetypes Matrix</h3>
+                        <p>Key telemetry centroids, acoustic profiles, and monetization potential</p>
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Behavioral Segment</th>
+                                <th>Share (%)</th>
+                                <th>Avg Stream</th>
+                                <th>Skip Rate</th>
+                                <th>Podcasts</th>
+                                <th>Top Hardware</th>
+                                <th>Avg LTV</th>
+                                <th>Primary Strategic Focus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for seg_id, seg in summary.clusters.items() %}
+                            <tr>
+                                <td>
+                                    <span class="segment-tag">
+                                        <span class="segment-dot" style="background-color: {{ seg.color }};"></span>
+                                        <strong>{{ seg.name }}</strong>
+                                    </span>
+                                </td>
+                                <td><strong>{{ seg.share_pct }}%</strong></td>
+                                <td>{{ seg.avg_daily_streaming_min }} m/d</td>
+                                <td>{{ (seg.avg_skip_rate * 100)|round(1) }}%</td>
+                                <td>{{ seg.avg_podcast_share_pct }}%</td>
+                                <td>{{ seg.top_devices.keys()|list|first }}</td>
+                                <td><strong style="color: #1db954;">${{ seg.avg_ltv }}</strong></td>
+                                <td style="font-size: 0.78rem; color: #cbd5e1;">
+                                    {% if seg_id == 0 %}Hi-Fi Lossless tier pre-order & annual lock-in
+                                    {% elif seg_id == 1 %}Skip-free workout promo & CarPlay integration
+                                    {% elif seg_id == 2 %}Audiobook hours add-on & creator subscriptions
+                                    {% elif seg_id == 3 %}Spotify Duo & Jam viral social invites
+                                    {% elif seg_id == 4 %}Household Family retention & Kids app adoption
+                                    {% else %}Low-friction 30-day win-back pass & habit restart
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: LATENT SPACE EXPLORER (2D PCA) -->
+        <section id="tab-latent-space" class="tab-content">
+            <div class="card-panel">
+                <div class="card-header">
+                    <div>
+                        <h3>🌌 High-Dimensional Behavioral Latent Space Projection</h3>
+                        <p>18 Spotify interaction & transaction features projected to 2D latent space via PCA (1,200 sampled users)</p>
+                    </div>
+                </div>
+                <div class="chart-box" style="height: 520px;">
+                    <canvas id="pcaScatterChart"></canvas>
+                </div>
+                <div style="margin-top: 16px; font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between;">
+                    <span>💡 <strong>Hover over points</strong> to inspect individual subscriber telemetry, skip rates, and LTV.</span>
+                    <span>Component 1 & 2 capture 46.2% of high-dimensional behavioral variance.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: SEGMENT RADAR & DEEP PROFILE -->
+        <section id="tab-radar-profile" class="tab-content">
+            <div class="grid-2col">
+                <!-- Multi-Axis Radar Chart -->
+                <div class="card-panel">
+                    <div class="card-header">
+                        <div>
+                            <h3>🎯 8-Dimensional Segment Radar Comparison</h3>
+                            <p>Direct comparison of acoustic, discovery, device, and financial vectors</p>
+                        </div>
+                    </div>
+                    <div class="chart-box" style="height: 420px;">
+                        <canvas id="segmentRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Segment Deep Dive Inspector -->
+                <div class="card-panel">
+                    <div class="card-header">
+                        <div>
+                            <h3>🔍 Archetype Telemetry Inspector</h3>
+                            <p>Select a cluster to inspect Z-scores, hardware distribution, and dayparts</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select Behavioral Segment</label>
+                        <select class="form-select" id="radarSegmentSelector">
+                            <option value="0">The Sonic Loyalist (Focus & Hi-Fi Powerhouse)</option>
+                            <option value="1">The Commute & Workout Hitseeker</option>
+                            <option value="2">The Spoken-Word Explorer (Podcasts & Audiobooks)</option>
+                            <option value="3">The Social Discovery Nomad (Viral & Trends)</option>
+                            <option value="4">The Value Maximizer (Family & Multi-Device)</option>
+                            <option value="5">The Disengaged Free-Tier Drifter (At-Risk)</option>
+                        </select>
+                    </div>
+
+                    <div style="background: rgba(10, 14, 20, 0.6); padding: 18px; border-radius: 12px; border: 1px solid var(--border-subtle);">
+                        <h4 id="detailSegName" style="font-size: 1.1rem; margin-bottom: 2px;">Sonic Loyalist</h4>
+                        <p id="detailSegShare" style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 14px;">18% of listener base</p>
+                        
+                        <div class="user-telemetry-grid" style="margin-top: 0; margin-bottom: 14px;">
+                            <div class="telemetry-item">
+                                <span>Average LTV</span>
+                                <strong id="detailSegLtv">$245.50</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>Daily Stream</span>
+                                <strong id="detailSegStream">275 m/d</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>Skip Rate</span>
+                                <strong id="detailSegSkip">6.2%</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>Podcast Share</span>
+                                <strong id="detailSegPodcast">8.0%</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 12px;">
+                            <span class="form-label">Dominant Hardware Platforms</span>
+                            <div id="detailDevices"></div>
+                        </div>
+
+                        <div style="margin-bottom: 12px;">
+                            <span class="form-label">Peak Streaming Dayparts</span>
+                            <div id="detailDayparts"></div>
+                        </div>
+
+                        <div>
+                            <span class="form-label">Top Statistically Distinctive Vectors (Z-Score)</span>
+                            <div id="detailZScores"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: LLM PERSONA & STRATEGY STUDIO -->
+        <section id="tab-llm-studio" class="tab-content">
+            <!-- Studio Control Header -->
+            <div class="card-panel" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <div>
+                        <h3>🧠 LLM-Powered Differentiated Strategy Studio</h3>
+                        <p>Generate bespoke psychological personas, multi-channel copy, and attribution forecasts using LLM customer intelligence</p>
+                    </div>
+                </div>
+                <div class="grid-kpi" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 0;">
+                    <div class="form-group">
+                        <label class="form-label">Target Behavioral Segment</label>
+                        <select class="form-select" id="llmSegmentSelect">
+                            <option value="0">0: Sonic Loyalist (Focus & Hi-Fi)</option>
+                            <option value="1">1: Commute & Workout Hitseeker</option>
+                            <option value="2">2: Spoken-Word Explorer (Podcasts)</option>
+                            <option value="3">3: Social Discovery Nomad (Viral)</option>
+                            <option value="4">4: Value Maximizer (Family Plan)</option>
+                            <option value="5">5: Disengaged Free-Tier Drifter (At-Risk)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Business Campaign Objective</label>
+                        <select class="form-select" id="llmObjectiveSelect">
+                            <option value="Convert Free to Premium">Convert Free to Premium</option>
+                            <option value="Prevent Subscriber Churn">Prevent Subscriber Churn</option>
+                            <option value="Cross-Sell Audiobook Hours">Cross-Sell Audiobook Hours</option>
+                            <option value="Upsell to Spotify Duo / Family">Upsell to Spotify Duo / Family</option>
+                            <option value="Reactivate Lapsed Listeners">Reactivate Lapsed Listeners</option>
+                            <option value="HiFi Lossless Pre-Order">HiFi Lossless Pre-Order</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Spotify Brand Tone</label>
+                        <select class="form-select" id="llmToneSelect">
+                            <option value="Witty & Punchy">Witty & Punchy (Wrapped Style)</option>
+                            <option value="High-Energy & Bold">High-Energy & Bold (Workout Style)</option>
+                            <option value="Calm & Sophisticated">Calm & Sophisticated (Audiophile)</option>
+                            <option value="Empathetic & Low-Pressure">Empathetic & Low-Pressure (Win-Back)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Channel Mix</label>
+                        <select class="form-select" id="llmChannelSelect">
+                            <option value="Omni-Channel">Omni-Channel (Push + In-App + Email + Audio)</option>
+                            <option value="Mobile-First Push & In-App">Mobile-First Push & In-App</option>
+                            <option value="Audio Ad & Social Sponsored">Audio Ad & Social Sponsored</option>
+                            <option value="Email Nurture Digest">Email Nurture Digest</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top: 14px; text-align: right;">
+                    <button class="btn-primary" id="btnGenerateStrategy">
+                        ✨ Synthesize Differentiated Strategy
+                    </button>
+                </div>
+            </div>
+
+            <!-- LLM Strategy Results View -->
+            <div class="grid-2col">
+                <!-- Left: Executive Strategy & Tactics -->
+                <div class="card-panel">
+                    <div class="card-header">
+                        <div>
+                            <h3>🎯 Prescriptive Strategic Architecture</h3>
+                            <p id="resFrictionSolved" style="color: #00e5ff;">Target Friction Solved</p>
+                        </div>
+                    </div>
+                    <p id="resStrategySummary" style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 16px; line-height: 1.5;"></p>
+                    
+                    <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px;">Differentiated Tactical Pillars</h4>
+                    <div id="resTacticsList"></div>
+
+                    <!-- Projected Lift Forecast -->
+                    <div style="margin-top: 20px; background: rgba(29, 185, 84, 0.08); border: 1px solid rgba(29, 185, 84, 0.25); border-radius: 10px; padding: 14px;">
+                        <h5 style="font-size: 0.82rem; font-weight: 700; color: #1db954; margin-bottom: 8px;">Attribution & Efficiency Forecast</h5>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                            <span>CAC Reduction: <strong id="forecastCac" style="color: #1db954;">-38.5%</strong></span>
+                            <span>Conversion Lift: <strong id="forecastLift" style="color: #00e5ff;">3.14x</strong></span>
+                            <span>Churn Mitigation: <strong id="forecastChurn" style="color: #ffd600;">-24.2%</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Omnichannel Creative Previews -->
+                <div class="card-panel">
+                    <div class="card-header">
+                        <div>
+                            <h3>📱 Omnichannel Creative Concepts</h3>
+                            <p>Real-time generated copy variations for push notifications, in-app modals, and audio ads</p>
+                        </div>
+                    </div>
+
+                    <!-- Push Notification Preview -->
+                    <div class="creative-preview-box">
+                        <div class="creative-type-badge">
+                            <span>📲</span> Push Notification Mockup
+                        </div>
+                        <div class="push-notification-preview">
+                            <div class="push-app-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.48.66.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                            </div>
+                            <div class="push-content">
+                                <h5 id="pushTitle">Your Deep Work Zone is Ready</h5>
+                                <p id="pushBody">Zero interruptions, pure 320kbps acoustic focus.</p>
+                                <span id="pushCta" style="display: block; margin-top: 4px; font-size: 0.72rem; color: #1db954; font-weight: 700;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- In-App Modal Preview -->
+                    <div class="creative-preview-box">
+                        <div class="creative-type-badge">
+                            <span>🖼️</span> In-App Modal Copy
+                        </div>
+                        <div style="background: #182230; padding: 14px; border-radius: 8px;">
+                            <h4 id="modalHeadline" style="font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 4px;">Headline</h4>
+                            <p id="modalSubhead" style="font-size: 0.8rem; color: #cbd5e1; margin-bottom: 10px;">Subhead copy</p>
+                            <button class="btn-primary" id="modalCta" style="padding: 6px 14px; font-size: 0.75rem;">Action CTA</button>
+                        </div>
+                    </div>
+
+                    <!-- Audio Ad / Email Script Preview -->
+                    <div class="creative-preview-box">
+                        <div class="creative-type-badge">
+                            <span id="audioEmailLabel">🎙️ Audio Ad Script</span>
+                        </div>
+                        <div id="audioEmailContent" style="font-size: 0.8rem; color: #cbd5e1; font-style: italic; background: #131922; padding: 12px; border-radius: 8px; line-height: 1.45;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: CUSTOMER TELEMETRY LOOKUP -->
+        <section id="tab-user-lookup" class="tab-content">
+            <div class="card-panel">
+                <div class="card-header">
+                    <div>
+                        <h3>🔍 Individual Customer Telemetry & Soft Affinity Inspector</h3>
+                        <p>Search any Spotify subscriber to inspect their raw telemetry and GMM multi-cluster probability distribution</p>
+                    </div>
+                </div>
+
+                <!-- Search Input & Sample Chips -->
+                <div style="display: flex; gap: 12px; margin-bottom: 12px; max-width: 600px;">
+                    <input type="text" class="form-input" id="inputUserId" value="SPOT-100010" placeholder="Enter Spotify User ID (e.g. SPOT-100001)">
+                    <button class="btn-primary" id="btnSearchUser">Inspect User</button>
+                </div>
+                <div style="margin-bottom: 20px; font-size: 0.78rem; color: #94a3b8; display: flex; align-items: center; gap: 8px;">
+                    <span>Try sample users:</span>
+                    <button class="btn-secondary user-chip" data-user-id="SPOT-100002" style="padding: 2px 10px; font-size: 0.72rem;">SPOT-100002 (Hitseeker)</button>
+                    <button class="btn-secondary user-chip" data-user-id="SPOT-100015" style="padding: 2px 10px; font-size: 0.72rem;">SPOT-100015 (Podcaster)</button>
+                    <button class="btn-secondary user-chip" data-user-id="SPOT-100030" style="padding: 2px 10px; font-size: 0.72rem;">SPOT-100030 (Drifter)</button>
+                </div>
+
+                <!-- User Card Display -->
+                <div style="background: rgba(10, 14, 20, 0.7); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-subtle); padding-bottom: 14px;">
+                        <div>
+                            <h3 id="userFoundId" style="font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em;">SPOT-100010</h3>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                                <span id="userFoundSegment" style="font-weight: 700; font-size: 0.95rem;">Sonic Loyalist</span>
+                                <span class="badge-pill" id="userFoundDemographic">25-34 Millennial | US</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Churn Risk Hazard</span>
+                            <span id="userFoundChurn" style="font-size: 1.4rem; font-weight: 800;">14.2%</span>
+                        </div>
+                    </div>
+
+                    <!-- Telemetry Attributes Grid -->
+                    <div class="user-telemetry-grid">
+                        <div class="telemetry-item">
+                            <span>Subscription Tier</span>
+                            <strong id="userFoundTier">Premium Individual</strong>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Account Tenure</span>
+                            <strong id="userFoundTenure">32 months</strong>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Realized LTV</span>
+                            <strong id="userFoundLtv" style="color: #1db954;">$351.68</strong>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Daily Streaming</span>
+                            <strong id="userFoundStream">285 m/d</strong>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Track Skip Rate</span>
+                            <strong id="userFoundSkip">5.8%</strong>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Podcast Consumption</span>
+                            <strong id="userFoundPodcast">6.2%</strong>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Primary Hardware</span>
+                            <strong id="userFoundDevice">Desktop App</strong>
+                        </div>
+                        <div class="telemetry-item">
+                            <span>Offline Downloads</span>
+                            <strong style="color: #00e5ff;">Active</strong>
+                        </div>
+                    </div>
+
+                    <!-- GMM Soft Affinity Breakdown -->
+                    <div style="margin-top: 24px;">
+                        <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px;">
+                            Gaussian Mixture Model (GMM) Soft Persona Affinity
+                        </h4>
+                        <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px;">
+                            Unlike rigid hard clustering, soft clustering models a user's multi-faceted identity (e.g. 78% Sonic Loyalist, 16% Spoken-Word Explorer).
+                        </p>
+                        <div id="userAffinityBars"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: CAMPAIGN SIMULATOR & ROI LIFT -->
+        <section id="tab-simulator" class="tab-content">
+            <div class="card-panel" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <div>
+                        <h3>📈 Marketing Budget Allocation & ROI Lift Simulator</h3>
+                        <p>Simulate deploying capital into Spotify's legacy demographic targeting vs. LLM Behavioral Customer Intelligence</p>
+                    </div>
+                </div>
+
+                <!-- Simulator Controls -->
+                <div class="grid-2col" style="align-items: center; margin-bottom: 12px;">
+                    <div>
+                        <span class="form-label">Total Campaign Budget ($ USD)</span>
+                        <div class="slider-container">
+                            <input type="range" class="custom-slider" id="budgetSlider" min="10000" max="1000000" step="10000" value="100000">
+                            <div class="slider-val-box" id="budgetDisplay">$100,000</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="form-label">Strategic Objective</span>
+                        <select class="form-select" id="simulatorObjective">
+                            <option value="Premium Acquisition">Premium Acquisition (Free -> Paid Conversion)</option>
+                            <option value="Duo / Family Bundle Expansion">Duo / Family Bundle Expansion</option>
+                            <option value="Audiobook Cross-Sell">Audiobook Expansion Pack Cross-Sell</option>
+                            <option value="Win-Back Lapsed Users">Win-Back At-Risk Lapsed Listeners</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Side-by-Side Comparison KPI Grid -->
+                <div class="grid-2col" style="margin-top: 20px;">
+                    <!-- Traditional Demographic Box -->
+                    <div style="background: rgba(255, 42, 109, 0.08); border: 1px solid rgba(255, 42, 109, 0.3); border-radius: 12px; padding: 20px;">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: #ff2a6d; margin-bottom: 14px;">Legacy Demographic Targeting</h4>
+                        <div class="user-telemetry-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 0;">
+                            <div class="telemetry-item">
+                                <span>Conversions</span>
+                                <strong id="simDemoConversions">2,060</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>Blended CAC</span>
+                                <strong id="simDemoCac">$48.54</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>12-Mo Net Revenue</span>
+                                <strong id="simDemoRev">$142,300</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>Blended ROAS</span>
+                                <strong id="simDemoRoas">1.42x</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Behavioral Intelligence Box -->
+                    <div style="background: rgba(29, 185, 84, 0.08); border: 1px solid rgba(29, 185, 84, 0.35); border-radius: 12px; padding: 20px;">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1db954; margin-bottom: 14px;">LLM Behavioral Intelligence System</h4>
+                        <div class="user-telemetry-grid" style="grid-template-columns: repeat(2, 1fr); margin-top: 0;">
+                            <div class="telemetry-item">
+                                <span>Conversions</span>
+                                <strong id="simBehavConversions" style="color: #1db954;">5,380</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>Blended CAC</span>
+                                <strong id="simBehavCac" style="color: #00e5ff;">$18.58</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>12-Mo Net Revenue</span>
+                                <strong id="simBehavRev" style="color: #ffd600;">$642,800</strong>
+                            </div>
+                            <div class="telemetry-item">
+                                <span>Blended ROAS</span>
+                                <strong id="simBehavRoas" style="color: #1db954;">6.43x</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lift Callout Bar -->
+                <div style="margin-top: 20px; background: rgba(0, 229, 255, 0.08); border: 1px solid rgba(0, 229, 255, 0.25); border-radius: 10px; padding: 14px; display: flex; justify-content: space-around; font-size: 0.85rem;">
+                    <div>Conversions Lift: <strong id="simLiftConversions" style="color: #00e5ff;">+161.2%</strong></div>
+                    <div>CAC Reduction: <strong id="simLiftCac" style="color: #1db954;">-61.7%</strong></div>
+                    <div>Incremental 12-Mo Revenue: <strong id="simLiftRev" style="color: #ffd600;">+$500,500</strong></div>
+                    <div>ROAS Multiplier: <strong id="simLiftRoas" style="color: #1db954;">4.5x Multiplier</strong></div>
+                </div>
+            </div>
+
+            <!-- Side-by-Side Chart -->
+            <div class="card-panel">
+                <div class="card-header">
+                    <div>
+                        <h3>📊 Financial Attribution Comparison</h3>
+                        <p>Visualizing conversions, customer acquisition cost, and revenue returns</p>
+                    </div>
+                </div>
+                <div class="chart-box" style="height: 380px;">
+                    <canvas id="simulatorComparisonChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: PDF REPORT & DOCUMENTATION -->
+        <section id="tab-documentation" class="tab-content">
+            <div class="card-panel">
+                <div class="card-header">
+                    <div>
+                        <h3>📑 Executive Deliverables & Publication-Grade PDF Report</h3>
+                        <p>Complete academic and executive documentation for Project - 04: AI Customer Segmentation</p>
+                    </div>
+                    <a href="/api/download-report" class="btn-primary">
+                        <span>📥</span> Download Full PDF Report
+                    </a>
+                </div>
+
+                <div style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.6; max-width: 900px;">
+                    <h4 style="color: #fff; margin-top: 14px; margin-bottom: 6px;">1. Problem Formulation & Theoretical Background</h4>
+                    <p>
+                        Spotify operates in a hyper-competitive audio streaming environment where traditional demographic segmentation
+                        (age, gender, geographical country) acts as a severe bottleneck. Two 24-year-old users in the same zip code can
+                        have entirely divergent acoustic mindsets: one is a deep-work ambient focus streamer listening 5 hours a day on
+                        desktop DAC headphones, while another is a casual commuter with an 80% skip rate and high churn propensity.
+                        Targeting both with identical generic push notifications produces high unsubscribe rates, inflated CAC, and low trial conversion.
+                    </p>
+
+                    <h4 style="color: #fff; margin-top: 16px; margin-bottom: 6px;">2. Unsupervised Machine Learning Pipeline</h4>
+                    <p>
+                        Our machine learning architecture leverages an 18-dimensional feature vector spanning streaming duration, dayparts,
+                        skip rates, acoustic properties (danceability, energy, valence, acousticness, instrumentalness), content diversity
+                        (podcast and audiobook hours), and transactional indicators. Heavy-tailed count features are log-transformed, normalized via
+                        <code>StandardScaler</code>, and projected into a 2D/3D latent space via Principal Component Analysis (PCA).
+                        We employ both K-Means++ for hard partition centroid discovery and Gaussian Mixture Models (GMM) with full covariance
+                        matrices to calculate probabilistic soft cluster membership.
+                    </p>
+
+                    <h4 style="color: #fff; margin-top: 16px; margin-bottom: 6px;">3. LLM Customer Intelligence Architecture</h4>
+                    <p>
+                        Rather than presenting mathematical centroids directly to non-technical marketing directors, our LLM engine
+                        translates statistical Z-score vectors into vivid psychological personas. It synthesizes listening mindsets,
+                        identifies cognitive friction points, and recommends differentiated marketing strategies across 5 core tactical pillars:
+                        Value Proposition, Omnichannel Copy (Push, In-App, Email, Audio Ads), Retention Guardrails, Monetization Pathways, and Algorithmic Curation.
+                    </p>
+
+                    <div style="margin-top: 24px; padding: 16px; background: rgba(255, 255, 255, 0.04); border-radius: 10px; border-left: 3px solid #1db954;">
+                        <strong style="color: #1db954;">Formal PDF Report Deliverable:</strong>
+                        <p style="margin-top: 4px; font-size: 0.82rem; color: #94a3b8;">
+                            The publication-grade executive report includes high-resolution figures, radar charts, PCA projections,
+                            full persona dossiers, mathematical equations, and financial attribution modeling. Click the button above to download.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+{
+  "dataset_name": "Spotify Customer Interaction & Transaction Telemetry",
+  "total_records": 20000,
+  "features_count": 35,
+  "demographic_segments": {
+    "18-24 (Gen-Z)": {
+      "user_count": 6979,
+      "pct_of_base": 34.9,
+      "avg_daily_streaming_min": 166.0,
+      "avg_skip_rate": 0.248,
+      "avg_podcast_pct": 0.17,
+      "avg_ltv": 339.67,
+      "premium_penetration_pct": 78.0,
+      "traditional_campaign_ctr": 0.0169,
+      "traditional_campaign_cvr": 0.0138,
+      "estimated_cac_usd": 50.46,
+      "intra_cluster_variance_score": 0.84
+    },
+    "25-34 (Millennial)": {
+      "user_count": 7664,
+      "pct_of_base": 38.3,
+      "avg_daily_streaming_min": 166.5,
+      "avg_skip_rate": 0.247,
+      "avg_podcast_pct": 0.175,
+      "avg_ltv": 350.58,
+      "premium_penetration_pct": 78.0,
+      "traditional_campaign_ctr": 0.018,
+      "traditional_campaign_cvr": 0.0113,
+      "estimated_cac_usd": 47.54,
+      "intra_cluster_variance_score": 0.84
+    },
+    "35-50 (Gen-X)": {
+      "user_count": 3576,
+      "pct_of_base": 17.9,
+      "avg_daily_streaming_min": 166.8,
+      "avg_skip_rate": 0.247,
+      "avg_podcast_pct": 0.172,
+      "avg_ltv": 339.41,
+      "premium_penetration_pct": 78.3,
+      "traditional_campaign_ctr": 0.0184,
+      "traditional_campaign_cvr": 0.0117,
+      "estimated_cac_usd": 49.21,
+      "intra_cluster_variance_score": 0.84
+    },
+    "51+ (Boomer)": {
+      "user_count": 1781,
+      "pct_of_base": 8.9,
+      "avg_daily_streaming_min": 169.9,
+      "avg_skip_rate": 0.24,
+      "avg_podcast_pct": 0.168,
+      "avg_ltv": 349.0,
+      "premium_penetration_pct": 79.2,
+      "traditional_campaign_ctr": 0.0151,
+      "traditional_campaign_cvr": 0.0126,
+      "estimated_cac_usd": 53.72,
+      "intra_cluster_variance_score": 0.84
+    }
+  },
+  "traditional_demographic_flaws": [
+    "Conflates high-skip casuals with deep-focus audiophiles in the same 18-24 bracket.",
+    "Misses prime podcast & audiobook monetizable listeners grouped only by age/gender.",
+    "Wastes ad budget pushing generic Premium trials to at-risk disengaged users who need habit reactivation first.",
+    "Fails to identify multi-device family plan candidates hidden within 25-34 and 35-50 demographics.",
+    "Results in low campaign conversion (~1.1% CVR) and inflated Customer Acquisition Cost ($49.50 avg CAC)."
+  ]
+}
